@@ -32,6 +32,7 @@ export async function getUrlById(req, res){
             [id]
         );
         //delete rows.visitCount
+        //delete rows.userId
         res.status(200).send(rows);
     } catch (err){
         res.status(500).send(err.message);
@@ -53,6 +54,28 @@ export async function openUrl(req, res){
 
         const url = `/urls/open/${shortUrl}`
         res.redirect(url);
+    } catch (err){
+        res.status(500).send(err.message);
+    }
+}
+
+export async function deleteUrl(req, res){
+    const {id} = req.params;
+    try{
+        const urlExists = await connectionDB.query(
+            'SELECT * FROM urls WHERE id=$1;',
+            [id]
+        );
+
+        if (urlExists.rows[0].userId = id){
+    
+        await connectionDB.query("DELETE FROM urls WHERE id=$1;", [id]);
+        res.sendStatus(204);
+        } else{
+            return res
+            .status(422)
+            .send({ message: "Essa url não é sua!" });
+        }
     } catch (err){
         res.status(500).send(err.message);
     }
