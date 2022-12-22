@@ -1,5 +1,6 @@
 import { connectionDB } from "../database/db.js";
 import { usersSchema } from "../models/users.model.js";
+import bcrypt from "bcrypt";
 
 export async function signInBodyValidation(req, res, next) {
   const user = req.body;
@@ -20,6 +21,10 @@ if (!userExists.rows[0]) {
     return res
       .status(401)
       .send({ message: "Esse user não existe!" });
+  }
+  const rightPassword = bcrypt.compareSync(password, userExists.password);
+  if (!rightPassword) {
+    return res.status(401).send({message: "Senha incorreta!"});
   }
 
 next()

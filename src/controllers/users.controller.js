@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 export async function postUsersSignUp(req, res){
     const {name, email, password} = req.body; //confirmPassword
     try{
-        const hashPassword = bcrypt.hashSync(user.password, 12); //create hash
+        const hashPassword = bcrypt.hashSync(password, 12); //create hash
 
         await connectionDB.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3);",
         [name, email, hashPassword]
@@ -26,7 +26,7 @@ export async function postUsersSignIn(req, res){
         );
         const userId = rows[0].id
         const name = rows[0].name
-
+        
         const data = {userId};
 		const secretKey = process.env.JWT_SECRET;
 		const config = { expiresIn: 60*60*24*30 };
