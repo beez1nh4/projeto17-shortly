@@ -8,4 +8,4 @@ app.use(express.json());
 app.use(usersRoutes);
 
 const port = process.env.PORT;
-app.listen(4000, () => console.log(`Server running in port: 4000`));
+app.listen(port, () => console.log(`Server running in port: ${port}`));

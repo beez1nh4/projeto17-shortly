@@ -40,3 +40,33 @@ export async function postUsersSignIn(req, res){
         res.status(500).send(err.message);
     }
 }
+
+export async function getUserInfo(req, res){
+    const { authorization } = req.headers;
+    const token = authorization.replace('Bearer ', '');
+
+    try{
+        const sessionExists = await connectionDB.query(
+            'SELECT * FROM sessions WHERE token=$1;',
+            [token]
+          );
+
+        if (rows[0]){
+        res.send(rows);
+        } else {
+            res.sendStatus(404);
+        }
+    } catch (err){
+        res.status(500).send(err.message);
+    }
+}
+
+export async function getRanking(req, res){
+    try{
+        //left join p n retornar nada se nao houver
+        const {rows} = await connectionDB.query("SELECT * FROM customers;");
+        res.send(rows);
+    } catch (err){
+        res.status(500).send(err.message);
+    }
+}
