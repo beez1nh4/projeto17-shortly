@@ -1,4 +1,4 @@
-CREATE DATABASE shortly;
+CREATE DATABASE shortly_db;
 
 CREATE TABLE "users" (
 	"id" serial PRIMARY KEY,
