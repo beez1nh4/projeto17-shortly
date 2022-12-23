@@ -41,8 +41,7 @@ export async function urlExistanceValidation2(req, res, next) {
     if (!urlExists.rows[0]) {
         return res
             .status(404)
-            //.send({ message: "Essa url não existe!" });
-            .send(shorturl);
+            .send({ message: "Essa url não existe!" });
     }
   
     next()

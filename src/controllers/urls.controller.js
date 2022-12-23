@@ -62,17 +62,23 @@ export async function deleteUrl(req, res){
     const {id} = req.params;
     try{
         const urlExists = await connectionDB.query(
-            'SELECT * FROM urls WHERE id=$1;',
+            'SELECT "userId" FROM urls WHERE id=$1;',
             [id]
         );
+        const { authorization } = req.headers;
+        const token = authorization.replace('Bearer ', '');
 
-        if (urlExists.rows[0].userId = id){
-    
-        await connectionDB.query("DELETE FROM urls WHERE id=$1;", [id]);
-        res.sendStatus(204);
+        const sessionExists = await connectionDB.query(
+            'SELECT "userId" FROM sessions WHERE token=$1;',
+            [token]
+            );
+
+        if (urlExists.rows[0].userId == sessionExists.rows[0].userId){
+            await connectionDB.query("DELETE FROM urls WHERE id=$1;", [id]);
+            res.sendStatus(204);
         } else{
             return res
-            .status(422)
+            .status(401)
             .send({ message: "Essa url não é sua!" });
         }
     } catch (err){
