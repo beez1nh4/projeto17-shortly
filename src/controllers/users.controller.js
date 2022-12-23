@@ -45,16 +45,22 @@ export async function getUserInfo(req, res){
     const token = authorization.replace('Bearer ', '');
 
     try{
-        const sessionExists = await connectionDB.query(
-            'SELECT * FROM sessions WHERE token=$1;',
+        const userInfo = await connectionDB.query(
+            'SELECT users.id AS "id", name, SUM("visitCount") AS "visitCount" FROM sessions JOIN users ON sessions."userId" = users.id JOIN urls ON urls."userId" = users.id WHERE token=$1 GROUP BY users.id;',
             [token]
           );
-
-        if (rows[0]){
-        res.send(rows);
-        } else {
-            res.sendStatus(404);
+        const urlsInfo = await connectionDB.query(
+            'SELECT urls.id AS "id", "shortUrl", "url", "visitCount" FROM urls JOIN sessions ON sessions."userId" = urls."userId" WHERE token=$1;',
+            [token]
+          );
+        const completeUserInfo = {
+            id: userInfo.rows[0].id,
+            name: userInfo.rows[0].name,
+            visitCount: userInfo.rows[0].visitCount,
+            shortenedUrls: urlsInfo.rows
         }
+        res.send(completeUserInfo);
+        
     } catch (err){
         res.status(500).send(err.message);
     }
