@@ -1,12 +1,25 @@
 import { connectionDB } from "../database/db.js";
-//import joi from "joi";
-//{ Authorization: `Bearer ${token}` }
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY3MTgwOTQ4MiwiZXhwIjoxNjc0NDAxNDgyfQ.rOqgpsEVxx-gbAzUV5w4lzjWc8SXuIeGDczo8Q2CUQU
-//shortUrl: V6KUB3cb
+import { tokenSchema } from "../models/token.model.js";
 
 export async function tokenValidation(req, res, next) {
   const { authorization } = req.headers;
+  if (!authorization){
+    return res
+        .status(401)
+        .send({ message: "Você precisa enviar um header válido!" });
+  }
+  const tokenObject = {
+    authorization
+  }
+  const { error } = tokenSchema.validate(tokenObject, { abortEarly: false });
+
+  if (error) {
+    const errors = error.details.map((detail) => detail.message);
+    return res.status(401).send(errors);
+  }
+  
   const token = authorization.replace('Bearer ', '');
+  
 
   const sessionExists = await connectionDB.query(
       'SELECT * FROM sessions WHERE token=$1;',

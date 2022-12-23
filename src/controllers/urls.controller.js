@@ -33,7 +33,7 @@ export async function getUrlById(req, res){
             [id]
         );
 
-        res.status(200).send(rows);
+        res.status(200).send(rows[0]);
     } catch (err){
         res.status(500).send(err.message);
     }
