@@ -50,7 +50,7 @@ export async function getUserInfo(req, res){
             [token]
           );
         const urlsInfo = await connectionDB.query(
-            'SELECT urls.id AS "id", "shortUrl", "url", "visitCount" FROM urls JOIN sessions ON sessions."userId" = urls."userId" WHERE token=$1;',
+            'SELECT urls.id AS "id", "shortUrl", "url", "visitCount" FROM urls JOIN sessions ON sessions."userId" = urls."userId" WHERE token=$1 ORDER BY "visitCount" DESC;',
             [token]
           );
         const completeUserInfo = {

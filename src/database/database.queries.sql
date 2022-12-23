@@ -25,13 +25,3 @@ CREATE TABLE "urls" (
 	"createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
-SELECT 
-	users.id as "id",
-	users.name as "name",
-	COUNT("userId") as "linksCount",
-	SUM("visitCount") AS "visitCount"
-FROM users
-LEFT JOIN urls ON urls."userId" = users.id
-GROUP BY users.id
-ORDER BY "visitCount" ASC
-LIMIT 10;
