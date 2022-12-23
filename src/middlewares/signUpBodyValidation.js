@@ -11,16 +11,16 @@ export async function signUpBodyValidation(req, res, next) {
     return res.status(422).send(errors);
   }
 
-const userExists = await connectionDB.query(
-    'SELECT * FROM users WHERE email=$1;',
-    [user.email]
-);
+  const userExists = await connectionDB.query(
+      'SELECT * FROM users WHERE email=$1;',
+      [user.email]
+  );
 
-if (userExists.rows[0]) {
-    return res
-      .status(409)
-      .send({ message: "Esse user já existe!" });
-  }
+  if (userExists.rows[0]) {
+      return res
+        .status(409)
+        .send({ message: "Esse user já existe!" });
+    }
 
-next()
+  next()
 }

@@ -7,7 +7,7 @@ import { tokenValidation } from "../middlewares/tokenValidation.js";
 const router = Router();
 
 router.post("/signup", signUpBodyValidation, postUsersSignUp);
-router.post("/signup", signInBodyValidation, postUsersSignIn);
+router.post("/signin", signInBodyValidation, postUsersSignIn);
 router.get("/users/me", tokenValidation, getUserInfo);
 router.get("/ranking", getRanking);
 
