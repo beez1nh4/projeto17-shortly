@@ -68,9 +68,17 @@ export async function getUserInfo(req, res){
 
 export async function getRanking(req, res){
     try{
-        //left join p n retornar nada se nao houver
-        const {rows} = await connectionDB.query("SELECT * FROM customers;");
-        res.send(rows);
+        const ranking = await connectionDB.query(`SELECT 
+            users.id as "id",
+            users.name as "name",
+            COUNT("userId") as "linksCount",
+            COALESCE(SUM("visitCount"),0) AS "visitCount"
+        FROM users
+        LEFT JOIN urls ON urls."userId" = users.id
+        GROUP BY users.id
+        ORDER BY "visitCount" DESC
+        LIMIT 10;`);
+        res.send(ranking.rows);
     } catch (err){
         res.status(500).send(err.message);
     }

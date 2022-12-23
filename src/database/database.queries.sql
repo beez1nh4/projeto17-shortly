@@ -25,4 +25,13 @@ CREATE TABLE "urls" (
 	"createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
-SELECT users.id AS "id", name, SUM("visitCount") FROM sessions JOIN users ON sessions."userId" = users.id JOIN urls ON urls."userId" = users.id WHERE token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY3MTgwOTQ4MiwiZXhwIjoxNjc0NDAxNDgyfQ.rOqgpsEVxx-gbAzUV5w4lzjWc8SXuIeGDczo8Q2CUQU' GROUP BY users.id;
+SELECT 
+	users.id as "id",
+	users.name as "name",
+	COUNT("userId") as "linksCount",
+	SUM("visitCount") AS "visitCount"
+FROM users
+LEFT JOIN urls ON urls."userId" = users.id
+GROUP BY users.id
+ORDER BY "visitCount" ASC
+LIMIT 10;
