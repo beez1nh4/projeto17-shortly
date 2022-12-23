@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 
 export async function signInBodyValidation(req, res, next) {
   const user = req.body;
+  const {email, password} = req.body;
   const { error } = usersSchema.validate(user, { abortEarly: false });
 
   if (error) {
@@ -14,18 +15,18 @@ export async function signInBodyValidation(req, res, next) {
 
 const userExists = await connectionDB.query(
     'SELECT * FROM users WHERE email=$1;',
-    [user.email]
+    [email]
 );
 
 if (!userExists.rows[0]) {
     return res
       .status(401)
       .send({ message: "Esse user não existe!" });
-  }
-  const rightPassword = bcrypt.compareSync(password, userExists.password);
+  } else{
+  const rightPassword = bcrypt.compareSync(password, userExists.rows[0].password);
   if (!rightPassword) {
     return res.status(401).send({message: "Senha incorreta!"});
   }
-
+}
 next()
 }

@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid'
+import { connectionDB } from '../database/db.js';
 
 export async function postUrl(req, res){
     try{
@@ -10,7 +11,7 @@ export async function postUrl(req, res){
             [token]
         );
         
-        const {userId} = sessionExists
+        const {userId} = sessionExists.rows[0];
 
         const {url} = req.body;
         const shortUrl = nanoid(8);
@@ -28,11 +29,10 @@ export async function getUrlById(req, res){
     const {id} = req.params;
     try{
         const {rows} = await connectionDB.query(
-            'SELECT * FROM urls WHERE id=$1;',
+            'SELECT id, "shortUrl", "url" FROM urls WHERE id=$1;',
             [id]
         );
-        //delete rows.visitCount
-        //delete rows.userId
+
         res.status(200).send(rows);
     } catch (err){
         res.status(500).send(err.message);

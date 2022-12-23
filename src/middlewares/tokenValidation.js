@@ -1,7 +1,8 @@
 import { connectionDB } from "../database/db.js";
 //import joi from "joi";
 //{ Authorization: `Bearer ${token}` }
-
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY3MTgwOTQ4MiwiZXhwIjoxNjc0NDAxNDgyfQ.rOqgpsEVxx-gbAzUV5w4lzjWc8SXuIeGDczo8Q2CUQU
+//shortUrl: V6KUB3cb
 
 export async function tokenValidation(req, res, next) {
   const { authorization } = req.headers;

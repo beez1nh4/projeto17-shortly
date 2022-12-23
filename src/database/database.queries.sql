@@ -11,8 +11,8 @@ CREATE TABLE "users" (
 CREATE TABLE "sessions" (
 	"id" SERIAL PRIMARY KEY,
 	"email" TEXT UNIQUE NOT NULL,
-    "password" TEXT NOT NULL,
 	"userId" INTEGER NOT NULL REFERENCES "users"("id"),
+    "token" TEXT UNIQUE NOT NULL,
 	"createdAt" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
