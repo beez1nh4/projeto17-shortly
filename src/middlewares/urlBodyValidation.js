@@ -31,17 +31,18 @@ export async function urlExistanceValidation(req, res, next) {
     next()
   }
 export async function urlExistanceValidation2(req, res, next) {
-    const {shortUrl} = req.params;
+    const {shorturl} = req.params;
   
     const urlExists = await connectionDB.query(
-    'SELECT * FROM urls WHERE shortUrl=$1;',
-    [shortUrl]
+    'SELECT * FROM urls WHERE "shortUrl"=$1;',
+    [shorturl]
     );
   
     if (!urlExists.rows[0]) {
         return res
             .status(404)
-            .send({ message: "Essa url não existe!" });
+            //.send({ message: "Essa url não existe!" });
+            .send(shorturl);
     }
   
     next()

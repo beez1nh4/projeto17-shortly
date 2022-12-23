@@ -7,7 +7,7 @@ const router = Router();
 
 router.post("/urls/shorten", tokenValidation, urlBodyValidation, postUrl);
 router.get("/urls/:id", urlExistanceValidation, getUrlById);
-router.get("/urls/open/:shortUrl", urlExistanceValidation2, openUrl);
+router.get("/urls/open/:shorturl", urlExistanceValidation2, openUrl);
 router.delete("/urls/:id", tokenValidation, urlExistanceValidation, deleteUrl);
 
 

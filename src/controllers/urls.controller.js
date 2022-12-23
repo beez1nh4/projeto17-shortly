@@ -40,19 +40,18 @@ export async function getUrlById(req, res){
 }
 
 export async function openUrl(req, res){
-    const {shortUrl} = req.params;
+    const {shorturl} = req.params;
     try{
         const {rows} = await connectionDB.query(
-            'SELECT * FROM urls WHERE shortUrl=$1;',
-            [shortUrl]
+            'SELECT * FROM urls WHERE "shortUrl"=$1;',
+            [shorturl]
         );
-        const newNumber = rows.shortUrl +1
-
+        const newNumber = rows[0].visitCount+1
         await connectionDB.query('UPDATE urls SET "visitCount"=$1 WHERE "shortUrl"=$2;',
-        [newNumber, shortUrl],
+        [newNumber, shorturl],
         );
 
-        const url = `/urls/open/${shortUrl}`
+        const url = rows[0].url
         res.redirect(url);
     } catch (err){
         res.status(500).send(err.message);
